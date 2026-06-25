@@ -68,8 +68,7 @@ export const getAllBlogs = asyncHandler(async (req, res, next) => {
 // Post Blog : POST API - 
 
 export const postBlog = asyncHandler(async (req, res, next) => {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
+
     const { blogTitle, blogCategory, blogImgFile, blogBody, user } = req.body
 
     if (!JSON.parse(user).isAdmin) {
@@ -81,7 +80,7 @@ export const postBlog = asyncHandler(async (req, res, next) => {
     const addBlogPost = new blogModel({
         blogTitle: blogTitle,
         blogCategory: blogCategory,
-        blogImgFile: blogImgFile,
+        blogImgFile: req.file.path,
         blogBody: blogBody,
         userId: JSON.parse(user)._id,
         slug: slug
