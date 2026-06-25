@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "fullstack-mern-blog-app": "file:.."
+  }
+}
