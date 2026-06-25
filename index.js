@@ -29,16 +29,8 @@ app.use('/api/blog', blogRouter);
 app.use('/api/comment', commentRouter);
 
 app.use('/uploads', express.static('uploads'));
-app.use(express.static(path.join(__dirname, '/client/dist')));
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'))
-});
 
 app.use(errorMiddleware);
-
-
-
 
 app.listen(PORT, "0.0.0.0" , () => {
     console.log(`Server is running at http://localhost:${PORT}`);
