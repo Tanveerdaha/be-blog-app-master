@@ -127,10 +127,9 @@ export const updateBlog = asyncHandler(async (req, res, next) => {
     }
 
     const isOwner = blog.userId.toString() === req.user.id;
-    const isAdmin = req.dbUser?.isAdmin;
 
-    if (!isAdmin && !isOwner) {
-        return next(errorHandler('An unexpected error occurred while updating blog!', 401));
+    if (!isOwner) {
+        return next(errorHandler('You can only edit your own blogs', 401));
     }
 
     const updatedBlog = await blogModel.findByIdAndUpdate(
