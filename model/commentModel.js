@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 
-
-
 const commentSchema = new mongoose.Schema({
-
     comment: {
         type: String,
         required: true
@@ -11,12 +8,14 @@ const commentSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true
-
     },
     blogId: {
         type: String,
         required: true
-
+    },
+    parentId: {
+        type: String,
+        default: null
     },
     likes: {
         type: Array,
@@ -27,7 +26,6 @@ const commentSchema = new mongoose.Schema({
         default: 0
     }
 }, { timestamps: true });
-
 
 const commentModel = mongoose.model('comment', commentSchema);
 

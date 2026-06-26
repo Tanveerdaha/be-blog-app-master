@@ -2,9 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 const PORT = process.env.PORT;
 const DB_URL = process.env.DB_URL;
-console.log('DB_URL:', DB_URL);
 import connectDB from './config/connectDB.js';
-connectDB(DB_URL);
+import { ensureInitialAdmin } from './utils/bootstrapAdmin.js';
 import express from 'express';
 const app = express();
 import cors from 'cors';
@@ -32,6 +31,25 @@ app.use('/uploads', express.static('uploads'));
 
 app.use(errorMiddleware);
 
-app.listen(PORT, "0.0.0.0" , () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await connectDB(DB_URL);
+
+        const adminResult = await ensureInitialAdmin();
+
+        if (adminResult.action === 'created') {
+            console.log(`Initial admin created: ${adminResult.email}`);
+        } else if (adminResult.action === 'promoted') {
+            console.log(`Existing user promoted to admin: ${adminResult.email}`);
+        }
+
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Server is running at http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error.message);
+        process.exit(1);
+    }
+};
+
+startServer();
